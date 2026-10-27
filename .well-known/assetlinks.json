@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.stryvexa.app",
+      "sha256_cert_fingerprints": [
+        "69:C0:2F:CC:28:37:60:EA:5D:06:9C:BF:B1:87:24:00:77:35:90:6A:07:5A:4B:E8:55:F0:02:13:D6:71:5C:0F"
+      ]
+    }
+  }
+]
