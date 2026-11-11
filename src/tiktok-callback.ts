@@ -18,16 +18,18 @@ if (params.has('error') || !params.get('code')?.trim()) {
   indicator.textContent = '✓';
   title.textContent = 'Autorización recibida';
   message.textContent = isAndroid
-    ? 'Abre Stryvexa para completar la conexión y ver el resultado en la aplicación.'
+    ? 'Abre Stryvexa para completar la conexión. Si Android no abre la app, revisa que Stryvexa tenga permitido abrir enlaces compatibles y vuelve a pulsar el botón.'
     : 'Vuelve a Stryvexa en el dispositivo donde iniciaste la conexión para continuar.';
 
   if (isAndroid) {
     openApp.hidden = false;
     openApp.addEventListener('click', () => {
-      // Host y ruta registrados en el AndroidManifest. El navegador entrega la respuesta tal como llegó.
-      const appLink = 'danielarevalo.github.io/stryvexa-site/tiktok-callback';
+      const appLink = 'stryvexa.ormivexa.com/tiktok-callback';
       const response = window.location.search + window.location.hash;
-      window.location.assign(`intent://${appLink}${response}#Intent;scheme=https;package=com.stryvexa.app;end`);
+      // Chrome vuelve a este mismo callback si Android no puede abrir la app.
+      const fallback = encodeURIComponent(window.location.href);
+      const intent = `intent://${appLink}${response}#Intent;scheme=https;package=com.stryvexa.app;S.browser_fallback_url=${fallback};end`;
+      window.location.assign(intent);
     });
   }
 }
