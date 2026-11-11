@@ -55,6 +55,7 @@ export default defineConfig(({ mode, command }): UserConfig => {
       transformIndexHtml: {
         order: 'post',
         handler(html, context) {
+          if (!html.includes('__SITE_URL__')) return html;
           const iconUrl = context.server ? `${base}src/assets/icons/stryvexa-app-icon-1024.png` : '__SITE_ICON__';
           return metadataHtml(html.replaceAll('__MANIFEST_URL__', `${base}manifest.webmanifest`).replaceAll('__SITE_URL__', escape(siteUrl)).replaceAll('__SITE_ICON__', escape(iconUrl)), routes[0].title, routes[0].description, siteUrl);
         },
@@ -75,6 +76,10 @@ export default defineConfig(({ mode, command }): UserConfig => {
         this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map(route => `  <url><loc>${escape(canonicalFor(route.path))}</loc></url>`).join('\n')}\n</urlset>\n` });
       },
     }],
-    build: { outDir: 'dist', assetsInlineLimit: 0 },
+    build: {
+      outDir: 'dist',
+      assetsInlineLimit: 0,
+      rollupOptions: { input: ['index.html', 'tiktok-callback/index.html'] },
+    },
   };
 });

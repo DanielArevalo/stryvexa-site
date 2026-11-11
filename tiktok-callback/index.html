@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0F172A">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Conexión con TikTok | Stryvexa</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, "Segoe UI", sans-serif;
+      color: #fff;
+      background: #0F172A;
+      --violet: #7C3AED;
+      --blue: #4F46E5;
+      --cyan: #22D3EE;
+    }
+    * { box-sizing: border-box; }
+    body {
+      display: grid;
+      place-items: center;
+      min-height: 100svh;
+      margin: 0;
+      padding: 24px;
+      background: radial-gradient(ellipse at 50% 0%, rgb(79 70 229 / 14%), transparent 60%);
+    }
+    .callback { width: min(100%, 480px); text-align: center; }
+    .brand { display: block; margin: 0 auto 24px; border-radius: 15px; }
+    .panel { padding: clamp(24px, 7vw, 42px); border: 1px solid rgb(255 255 255 / 14%); border-radius: 20px; }
+    .indicator {
+      display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto 20px;
+      border: 1px solid rgb(34 211 238 / 35%); border-radius: 50%; color: var(--cyan);
+      font-size: 25px; line-height: 1;
+    }
+    [data-state="processing"] .indicator { border: 2px solid rgb(255 255 255 / 16%); border-top-color: var(--cyan); animation: spin 1s linear infinite; }
+    [data-state="error"] .indicator { color: white; border-color: var(--violet); }
+    h1 { font-size: clamp(1.5rem, 5vw, 2rem); line-height: 1.15; margin: 0 0 14px; }
+    p { margin: 0; line-height: 1.65; color: rgb(255 255 255 / 78%); }
+    .actions { display: grid; justify-items: center; gap: 14px; margin-top: 24px; }
+    [hidden] { display: none !important; }
+    button, a { font: inherit; color: inherit; }
+    button { padding: 12px 20px; border: 0; border-radius: 8px; background: var(--violet); cursor: pointer; }
+    button:hover { background: var(--blue); }
+    a { text-underline-offset: 4px; }
+    :focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+    footer { margin-top: 24px; font-size: .82rem; color: rgb(255 255 255 / 68%); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .indicator { animation: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="callback">
+    <main class="panel" id="callback" data-state="processing">
+      <img class="brand" src="../src/assets/icons/stryvexa-app-icon-1024.png" width="64" height="64" alt="Stryvexa">
+      <div role="status" aria-live="polite" aria-atomic="true">
+        <span class="indicator" id="indicator" aria-hidden="true"></span>
+        <h1 id="status-title">Procesando la respuesta de TikTok</h1>
+        <p id="status-message">Estamos preparando el regreso a Stryvexa.</p>
+      </div>
+      <div class="actions">
+        <button id="open-app" type="button" hidden>Abrir Stryvexa en Android</button>
+        <a href="%BASE_URL%">Volver al sitio</a>
+      </div>
+      <noscript><p>Vuelve a la app de Stryvexa para revisar el estado de la conexión.</p></noscript>
+    </main>
+    <footer>Stryvexa by Ormivexa</footer>
+  </div>
+  <script type="module" src="../src/tiktok-callback.ts"></script>
+</body>
+</html>
