@@ -21,6 +21,10 @@ export default defineConfig(({ mode, command }): UserConfig => {
     [key: string]: unknown;
   };
   const pwaReferences = new Map<string, string>();
+  const faviconLinks = (html: string) =>
+    html.match(/<link\b[^>]*\brel="(?:icon|apple-touch-icon)"[^>]*>/g)?.join('\n    ') ?? '';
+  const addFavicons = (html: string, links: string) =>
+    html.replace('</head>', `    ${links}\n</head>`);
   function metadataHtml(html: string, title: string, description: string, url: string) {
     return html.replace(/<title>.*?<\/title>/, `<title>${escape(title)} | Stryvexa</title>`)
       .replace(/(<meta name="description" content=")[^"]*("\s*\/?>)/, `$1${escape(description)}$2`)
@@ -55,7 +59,12 @@ export default defineConfig(({ mode, command }): UserConfig => {
       transformIndexHtml: {
         order: 'post',
         handler(html, context) {
-          if (!html.includes('__SITE_URL__')) return html;
+          if (!html.includes('__SITE_URL__')) {
+            if (!context.server || !context.path.startsWith('/tiktok-callback')) return html;
+            const homeTemplate = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+            const links = faviconLinks(homeTemplate).replaceAll('href="./', `href="${base}`);
+            return addFavicons(html, links);
+          }
           const iconUrl = context.server ? `${base}src/assets/icons/stryvexa-app-icon-1024.png` : '__SITE_ICON__';
           return metadataHtml(html.replaceAll('__MANIFEST_URL__', `${base}manifest.webmanifest`).replaceAll('__SITE_URL__', escape(siteUrl)).replaceAll('__SITE_ICON__', escape(iconUrl)), routes[0].title, routes[0].description, siteUrl);
         },
@@ -67,6 +76,10 @@ export default defineConfig(({ mode, command }): UserConfig => {
         if (!appIcon) this.error('No se encontró el icono oficial de Stryvexa en los recursos de Vite.');
         const html = String(entry.source).replaceAll('__SITE_ICON__', escape(new URL(appIcon.fileName, siteUrl).href));
         entry.source = html;
+        const callback = bundle['tiktok-callback/index.html'];
+        if (callback?.type === 'asset') {
+          callback.source = addFavicons(String(callback.source), faviconLinks(html));
+        }
         this.emitFile({ type: 'asset', fileName: 'manifest.webmanifest', source: JSON.stringify({ ...manifest, icons: manifest.icons.map(icon => ({ ...icon, src: `./${this.getFileName(pwaReferences.get(icon.src)!)}` })) }, null, 2) });
         for (const route of routes.filter(item => item.path !== '/')) {
           this.emitFile({ type: 'asset', fileName: `${route.path.slice(1)}/index.html`, source: metadataHtml(html, route.title, route.description, canonicalFor(route.path)) });
