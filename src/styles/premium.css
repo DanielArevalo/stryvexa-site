@@ -345,9 +345,31 @@ h2>span{color:var(--text-muted)}
   .button:hover,.text-link:hover svg{translate:none}
 }
 
-/* Enlaces informativos y legales visibles sin alterar la navegación principal. */
-.header-information{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:10px 23px;padding-block:0 12px;font-size:11px;line-height:1.6;color:var(--text-muted)}
-.header-information a:hover{color:var(--brand-cyan)}
-html{scroll-padding-top:140px}
-#datos{scroll-margin-top:140px}
-@media(max-width:700px){.header-information{justify-content:center;gap:8px 17px;font-size:10px;padding-bottom:11px}}
+.site-header{background:var(--surface-base)}
+.site-header .header-row{height:76px;gap:clamp(18px,2vw,32px)}
+.site-header .main-nav{margin-inline:auto;gap:clamp(16px,1.7vw,26px)}
+.site-header .main-nav a{white-space:nowrap}
+.site-header .header-actions{flex-shrink:0}
+.site-header .header-access{background:var(--brand-violet);color:var(--text-primary);border-color:transparent}
+.site-header .header-access:hover{background:var(--brand-blue)}
+
+@media(max-width:1100px){
+  .site-header .header-row{height:70px}
+  .site-header .header-actions{margin-left:auto;gap:10px}
+  .site-header .menu-toggle{display:grid!important;padding:10px}
+  .site-header .main-nav{
+    display:none;position:absolute;top:100%;inset-inline:0;
+    flex-direction:column;align-items:stretch;gap:2px;margin:0;
+    padding:12px max(18px,calc((100% - 960px)/2)) 18px;
+    background:var(--surface-base);border-bottom:1px solid var(--line-subtle);
+    max-height:calc(100dvh - 70px);overflow:auto;
+  }
+  .site-header .main-nav.is-open{display:flex}
+  .site-header .main-nav a{font-size:14px;min-height:44px;padding:12px 8px;white-space:normal}
+  .site-header .main-nav a:after{left:8px;bottom:6px}
+}
+
+@media(max-width:380px){
+  .site-header .header-row{gap:8px}
+  .site-header .header-actions{gap:4px}
+}
