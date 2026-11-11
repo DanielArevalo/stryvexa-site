@@ -39,7 +39,6 @@ jobs:
       - name: Build site
         run: npm run build
         env:
-          VITE_BASE_PATH: /stryvexa-site/
           VITE_PUBLIC_URL: https://danielarevalo.github.io/stryvexa-site/
       - name: Setup Pages
         uses: actions/configure-pages@v5

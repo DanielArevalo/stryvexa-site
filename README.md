@@ -16,8 +16,8 @@ Contenido público completado: explicación de campañas por rol, recorrido de c
 
 1. Utilizar Node.js 22.12 o posterior. Se conserva el `package-lock.json` existente; si hay que restaurar dependencias, usar `npm ci` manualmente. No se instalaron ni añadieron dependencias durante este rediseño.
 2. Cuando se autorice la validación, ejecutar `npm run build` y revisar manualmente navegación directa y recarga de todas las rutas, menú móvil, paneles de ejemplo, accesibilidad, documentos legales y callback. No se ejecutaron build, tests, lint ni servidores.
-3. GitHub Pages: mantener como origen GitHub Actions. El workflow usa el lockfile existente con `npm ci` y publica únicamente `dist`, con `VITE_BASE_PATH=/stryvexa-site/` y la URL actual. No se disparó el workflow durante esta tarea.
-4. Cloudflare Pages: conectar este mismo repositorio y `main`, usar `npm run build` y salida `dist`. Configurar `VITE_BASE_PATH=/` y `VITE_PUBLIC_URL=https://stryvexa.ormivexa.com/` cuando el dominio esté operativo. Agregar dominio personalizado y DNS. Mantener GitHub Pages disponible durante la transición.
+3. GitHub Pages usa GitHub Actions para publicar `dist`. Vite deriva la base `/stryvexa-site/` de la URL pública que define el workflow.
+4. Cloudflare Pages compila `main` con `npm run build` y publica `dist`. Vite usa la base `/` y el dominio canónico `https://stryvexa.ormivexa.com/` en Cloudflare Pages.
 5. El botón Acceder abre información de acceso y enlaces legales. `VITE_ACCESS_URL` conserva la dirección pública facilitada, no un endpoint de login. Configurar la URL y el acceso real a la aplicación en una tarea autorizada cuando estén disponibles. No se modifica autenticación ni se inicia OAuth desde esta web.
 
 Ambos alojamientos deben servir `dist`. Las entradas de las rutas comerciales no duplican ni redirigen el callback de TikTok, que se conserva únicamente en `public/tiktok-callback/index.html`.

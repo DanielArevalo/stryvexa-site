@@ -1,6 +1,6 @@
 export const siteDefaults = {
   name: 'Stryvexa',
-  publicUrl: 'https://danielarevalo.github.io/stryvexa-site/',
+  publicUrl: 'https://stryvexa.ormivexa.com/',
   futurePublicUrl: 'https://stryvexa.ormivexa.com/',
   accessUrl: 'https://danielarevalo.github.io/stryvexa-site/',
   contactEmail: 'contacto@ormivexa.com',

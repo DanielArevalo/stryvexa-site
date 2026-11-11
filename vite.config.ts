@@ -7,11 +7,13 @@ import { routes } from './src/config/routes';
 
 export default defineConfig(({ mode, command }): UserConfig => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
-  const publicUrl = new URL(env.VITE_PUBLIC_URL || siteDefaults.publicUrl);
+  const isCloudflarePages = process.env.CF_PAGES === '1';
+  const publicUrl = new URL(
+    isCloudflarePages ? siteDefaults.publicUrl : env.VITE_PUBLIC_URL || siteDefaults.publicUrl,
+  );
   if (!publicUrl.pathname.endsWith('/')) publicUrl.pathname += '/';
   const siteUrl = publicUrl.href;
-  const configuredBase = env.VITE_BASE_PATH || publicUrl.pathname;
-  const base = configuredBase.startsWith('/') ? configuredBase.replace(/\/?$/, '/') : publicUrl.pathname;
+  const base = publicUrl.hostname === 'danielarevalo.github.io' ? publicUrl.pathname : '/';
   const escape = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
   const canonicalFor = (path: string) => new URL(path === '/' ? './' : path.slice(1) + '/', siteUrl).href;
   const manifest = JSON.parse(readFileSync(new URL('./src/assets/manifest.webmanifest', import.meta.url), 'utf8')) as {
@@ -31,6 +33,7 @@ export default defineConfig(({ mode, command }): UserConfig => {
   }
   return {
     base,
+    define: { 'import.meta.env.VITE_PUBLIC_URL': JSON.stringify(siteUrl) },
     plugins: [react(), tailwindcss(), {
       name: 'stryvexa-public-pages',
       enforce: 'post',
